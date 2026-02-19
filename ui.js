@@ -83,37 +83,56 @@ function scheduleValidation() {
   }, 1000);
 }
 
+function addConstraintMarker(x, y, type) {
+  const el = document.createElement("div");
+  el.className = `constraint ${type}`;
+  el.textContent = type === "eq" ? "=" : "×";
+  el.style.left = `${x}px`;
+  el.style.top = `${y}px`;
+  el.style.transform = "translate(-50%, -50%)"; // perfect centering
+  boardEl.appendChild(el);
+}
+
+function cellRect(r, c) {
+  const cell = boardEl.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
+  return cell.getBoundingClientRect();
+}
 
 function renderConstraints() {
   const n = state.n;
-  const { cell, gap, pad } = getBoardMetrics();
 
-  // Horizontal constraints (between c and c+1)
+  // remove old markers
+  boardEl.querySelectorAll(".constraint").forEach((x) => x.remove());
+
+  const boardRect = boardEl.getBoundingClientRect();
+
+  // Horizontal constraints: between (r,c) and (r,c+1)
   for (let r = 0; r < n; r++) {
     for (let c = 0; c < n - 1; c++) {
       const con = state.h?.[r]?.[c];
       if (!con) continue;
 
-      // center point between two cells
-      const x =
-        pad + c * (cell + gap) + cell + gap / 2;
-      const y =
-        pad + r * (cell + gap) + cell / 2;
+      const a = cellRect(r, c);
+      const b = cellRect(r, c + 1);
+
+      const x = ((a.right + b.left) / 2) - boardRect.left;
+      const y = ((a.top + a.bottom) / 2) - boardRect.top;
 
       addConstraintMarker(x, y, con);
     }
   }
 
-  // Vertical constraints (between r and r+1)
+  // Vertical constraints: between (r,c) and (r+1,c)
   for (let r = 0; r < n - 1; r++) {
     for (let c = 0; c < n; c++) {
       const con = state.v?.[r]?.[c];
       if (!con) continue;
 
-      const x =
-        pad + c * (cell + gap) + cell / 2;
-      const y =
-        pad + r * (cell + gap) + cell + gap / 2;
+      const a = cellRect(r, c);
+      const b = cellRect(r + 1, c);
+
+      const x = ((a.left + a.right) / 2) - boardRect.left;
+      const y = ((a.bottom + b.top) / 2) - boardRect.top;
 
       addConstraintMarker(x, y, con);
     }

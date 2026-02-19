@@ -1,7 +1,16 @@
 :root {
   --cell: 54px;
   --gap: 8px;
-  --border: 2px;
+
+  --bg: #0b0d12;
+  --panel: #0f131b;
+  --tile: #121827;
+  --tile-given: #101a2e;
+
+  --line: rgba(255,255,255,0.08);
+  --line-strong: rgba(255,255,255,0.14);
+  --text: #e9eef7;
+  --muted: rgba(233,238,247,0.75);
 }
 
 * { box-sizing: border-box; }
@@ -9,8 +18,9 @@
 body {
   margin: 0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background: #0f1115;
-  color: #e9eef7;
+  background: radial-gradient(1200px 700px at 50% -20%, rgba(120,160,255,0.12), transparent 55%),
+              var(--bg);
+  color: var(--text);
 }
 
 .topbar {
@@ -18,10 +28,14 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 14px 16px;
-  border-bottom: 1px solid #2a2f3a;
+  border-bottom: 1px solid var(--line);
   gap: 14px;
   flex-wrap: wrap;
+  background: rgba(0,0,0,0.12);
+  backdrop-filter: blur(10px);
 }
+.meta { opacity: 1; color: var(--muted); }
+.help { color: var(--muted); }
 
 h1 {
   margin: 0;
@@ -48,10 +62,10 @@ h1 {
 select, button {
   font: inherit;
   padding: 8px 10px;
-  border-radius: 10px;
-  border: 1px solid #2a2f3a;
-  background: #171a21;
-  color: #e9eef7;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
 }
 
 button { cursor: pointer; }
@@ -70,32 +84,37 @@ main {
   grid-template-columns: repeat(6, var(--cell));
   grid-template-rows: repeat(6, var(--cell));
   gap: var(--gap);
-  padding: 12px;
-  border-radius: 16px;
-  background: #12151c;
-  border: 1px solid #2a2f3a;
+  padding: 14px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  border: 1px solid var(--line);
+  box-shadow:
+    0 16px 40px rgba(0,0,0,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.05);
 }
+
 
 .cell {
   width: var(--cell);
   height: var(--cell);
-  border-radius: 14px;
-  background: #171a21;
-  border: 1px solid #2a2f3a;
+  border-radius: 16px;
+  background: var(--tile);
+  border: 1px solid var(--line);
   display: grid;
   place-items: center;
-  font-size: 26px;
   user-select: none;
   touch-action: manipulation;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
 }
 
 .cell.given {
-  background: #121824;
-  border-color: #3a4660;
+  background: var(--tile-given);
+  border-color: var(--line-strong);
 }
 
 .cell.invalid {
-  outline: 2px solid #ff4d4d;
+  outline: 2px solid rgba(255, 77, 77, 0.85);
+  outline-offset: 1px;
 }
 
 .help {
@@ -111,18 +130,19 @@ main {
 
 .constraint {
   position: absolute;
-  width: 22px;
-  height: 22px;
-  border-radius: 999px;
+  width: 18px;
+  height: 18px;
+  border-radius: 8px;
   display: grid;
   place-items: center;
   font-weight: 700;
   font-size: 14px;
-  background: #0f1115;
-  border: 1px solid #2a2f3a;
-  color: #e9eef7;
+  background: transparent;
+  border: none;
+  color: rgba(233,238,247,0.65);
   pointer-events: none;
-  opacity: 0.9;
+  opacity: 1;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.6);
 }
 
 /* Symbol shapes */
@@ -155,9 +175,7 @@ main {
 }
 
 .symbol.moon::after {
-  width: 85%;
-  height: 85%;
-  background: #171a21; /* match cell background */
+  background: var(--tile);
   left: 30%;
   top: 8%;
 }
@@ -194,9 +212,67 @@ main {
 
 
 /* just for subtle alignment */
-.constraint.eq { }
-.constraint.neq { }
-
+.constraint.eq { color: rgba(233,238,247,0.80); }
+.constraint.neq { color: rgba(233,238,247,0.62); }
 
 /* Optional subtle feedback */
 .cell:active { transform: scale(0.98); }
+
+/* 1) No gaps */
+:root {
+  --gap: 0px;
+}
+
+/* Board: crisp, less "cardy" */
+.board {
+  padding: 0;                 /* no padding so it feels like one grid */
+  border-radius: 16px;        /* keep board slightly rounded (optional) */
+  background: transparent;    /* let cells define the grid */
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+}
+
+/* Cells: sharp edges, grid-line style */
+.cell {
+  border-radius: 0;  /* 3) no rounded edges */
+  background: #121827;
+  border: 1px solid rgba(255,255,255,0.08);
+
+  /* remove inner "card" effects */
+  box-shadow: none;
+}
+
+/* Given tiles still subtle */
+.cell.given {
+  background: #101a2e;
+  border-color: rgba(255,255,255,0.12);
+}
+
+/* 1) Fix moon visibility: brighter moon + correct cutout */
+.symbol.moon::before {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 35% 35%, #d8f0ff, #7ec3ff);
+  box-shadow: 0 0 10px rgba(126,195,255,0.35);
+}
+
+.symbol.moon::after {
+  width: 82%;
+  height: 82%;
+  background: #121827; /* must match .cell background EXACTLY */
+  left: 32%;
+  top: 8%;
+}
+
+/* Sun stays as-is, but you can reduce glow a bit if you want */
+.symbol.sun {
+  box-shadow: 0 0 10px rgba(255, 180, 50, 0.55);
+}
+
+.board { border-radius: 0; }
+
+.constraint {
+  font-size: 13px;
+  color: rgba(233,238,247,0.7);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.7);
+}
