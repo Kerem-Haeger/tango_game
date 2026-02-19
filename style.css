@@ -148,14 +148,14 @@ main {
 /* Symbol shapes */
 
 .symbol {
-  width: 70%;
-  height: 70%;
+  width: 60%;
+  height: 60%;
   position: relative;
 }
 
 /* SUN — solid circle */
 .symbol.sun {
-  background: radial-gradient(circle at 35% 35%, #ffd76a, #ff9e2a);
+  background: radial-gradient(circle at 30% 30%, #ffd76a, #ff9e2a);
   border-radius: 50%;
   box-shadow: 0 0 8px rgba(255, 180, 50, 0.6);
 }
