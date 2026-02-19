@@ -1,0 +1,202 @@
+:root {
+  --cell: 54px;
+  --gap: 8px;
+  --border: 2px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: #0f1115;
+  color: #e9eef7;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #2a2f3a;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+h1 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.meta {
+  display: flex;
+  gap: 12px;
+  opacity: 0.9;
+  font-size: 14px;
+}
+
+.status {
+  opacity: 0.9;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+select, button {
+  font: inherit;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #2a2f3a;
+  background: #171a21;
+  color: #e9eef7;
+}
+
+button { cursor: pointer; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+main {
+  display: grid;
+  place-items: center;
+  padding: 18px 12px 24px;
+  gap: 14px;
+}
+
+.board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(6, var(--cell));
+  grid-template-rows: repeat(6, var(--cell));
+  gap: var(--gap);
+  padding: 12px;
+  border-radius: 16px;
+  background: #12151c;
+  border: 1px solid #2a2f3a;
+}
+
+.cell {
+  width: var(--cell);
+  height: var(--cell);
+  border-radius: 14px;
+  background: #171a21;
+  border: 1px solid #2a2f3a;
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.cell.given {
+  background: #121824;
+  border-color: #3a4660;
+}
+
+.cell.invalid {
+  outline: 2px solid #ff4d4d;
+}
+
+.help {
+  margin: 0;
+  opacity: 0.85;
+  font-size: 14px;
+}
+
+/* Constraint markers between cells */
+.board {
+  position: relative; /* already is */
+}
+
+.constraint {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 14px;
+  background: #0f1115;
+  border: 1px solid #2a2f3a;
+  color: #e9eef7;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+/* Symbol shapes */
+
+.symbol {
+  width: 70%;
+  height: 70%;
+  position: relative;
+}
+
+/* SUN — solid circle */
+.symbol.sun {
+  background: radial-gradient(circle at 35% 35%, #ffd76a, #ff9e2a);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255, 180, 50, 0.6);
+}
+
+/* MOON — crescent */
+.symbol.moon::before,
+.symbol.moon::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+
+.symbol.moon::before {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 40% 40%, #bfe3ff, #7db9ff);
+}
+
+.symbol.moon::after {
+  width: 85%;
+  height: 85%;
+  background: #171a21; /* match cell background */
+  left: 30%;
+  top: 8%;
+}
+
+.win {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: grid;
+  place-items: center;
+  z-index: 999;
+}
+
+.win.hidden { display: none; }
+
+.win-card {
+  width: min(360px, 90vw);
+  background: #12151c;
+  border: 1px solid #2a2f3a;
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.win-card h2 {
+  margin: 0 0 8px;
+}
+
+.win-card p {
+  margin: 0 0 14px;
+  opacity: 0.9;
+}
+
+
+/* just for subtle alignment */
+.constraint.eq { }
+.constraint.neq { }
+
+
+/* Optional subtle feedback */
+.cell:active { transform: scale(0.98); }

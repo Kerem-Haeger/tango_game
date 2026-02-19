@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tango (Clone)</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="left">
+        <h1>Tango</h1>
+        <div class="meta">
+          <span id="timer">00:00</span>
+          <span id="status" class="status"></span>
+        </div>
+      </div>
+
+      <div class="right">
+        <label>
+          Difficulty:
+          <select id="difficulty">
+            <option value="easy">Easy</option>
+            <option value="medium" selected>Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </label>
+
+        <button id="newPuzzle">New</button>
+        <button id="hint">Hint</button>
+        <button id="undo">Undo</button>
+      </div>
+    </header>
+
+<div id="winOverlay" class="win hidden" role="dialog" aria-modal="true">
+  <div class="win-card">
+    <h2>Solved!</h2>
+    <p id="winTime"></p>
+    <button id="winNew">New puzzle</button>
+  </div>
+</div>
+
+    <main>
+      <div id="board" class="board" aria-label="Tango board"></div>
+      <p class="help">
+        Tap/click cycles: <strong>☀️ → 🌙 → empty</strong>
+      </p>
+    </main>
+
+    <script src="engine.js"></script>
+    <script src="ui.js"></script>
+  </body>
+</html>
